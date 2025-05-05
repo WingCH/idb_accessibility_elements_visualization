@@ -2,6 +2,8 @@
 
 This tool is used to visualize the accessibility element structure of iPhone applications, helping developers and designers better understand and optimize accessibility support in their apps.
 
+<img width="1956" alt="image" src="https://github.com/user-attachments/assets/005d2748-95b5-4278-9c0a-d7998a5e9d16" />
+
 ## Features
 
 - Read and parse iOS accessibility element JSON data
