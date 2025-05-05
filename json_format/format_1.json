@@ -1,0 +1,107 @@
+[
+    {
+        "AXFrame": "{{0, 0}, {440, 956}}",
+        "AXUniqueId": null,
+        "frame": {
+            "y": 0,
+            "x": 0,
+            "width": 440,
+            "height": 956
+        },
+        "role_description": "application",
+        "AXLabel": "Reminders",
+        "content_required": false,
+        "type": "Application",
+        "title": null,
+        "help": null,
+        "custom_actions": [],
+        "AXValue": null,
+        "enabled": true,
+        "role": "AXApplication",
+        "subrole": null
+    },
+    {
+        "AXFrame": "{{0, 56.333333333333343}, {440, 96}}",
+        "AXUniqueId": "Reminders",
+        "frame": {
+            "y": 56.333333333333343,
+            "x": 0,
+            "width": 440,
+            "height": 96
+        },
+        "role_description": "Nav bar",
+        "AXLabel": null,
+        "content_required": false,
+        "type": "Group",
+        "title": null,
+        "help": null,
+        "custom_actions": [],
+        "AXValue": null,
+        "enabled": true,
+        "role": "AXGroup",
+        "subrole": null
+    },
+    {
+        "AXFrame": "{{0, 0}, {440, 956}}",
+        "AXUniqueId": null,
+        "frame": {
+            "y": 0,
+            "x": 0,
+            "width": 440,
+            "height": 956
+        },
+        "role_description": "Group",
+        "AXLabel": "Empty list",
+        "content_required": false,
+        "type": "Group",
+        "title": null,
+        "help": null,
+        "custom_actions": [],
+        "AXValue": null,
+        "enabled": true,
+        "role": "AXGroup",
+        "subrole": null
+    },
+    {
+        "AXFrame": "{{20, 466}, {400, 24}}",
+        "AXUniqueId": null,
+        "frame": {
+            "y": 466,
+            "x": 20,
+            "width": 400,
+            "height": 24
+        },
+        "role_description": "group",
+        "AXLabel": "Reminders List",
+        "content_required": false,
+        "type": "Group",
+        "title": null,
+        "help": null,
+        "custom_actions": [],
+        "AXValue": null,
+        "enabled": true,
+        "role": "AXGroup",
+        "subrole": null
+    },
+    {
+        "AXFrame": "{{0, 878}, {440, 44}}",
+        "AXUniqueId": "Toolbar",
+        "frame": {
+            "y": 878,
+            "x": 0,
+            "width": 440,
+            "height": 44
+        },
+        "role_description": "group",
+        "AXLabel": "Toolbar",
+        "content_required": false,
+        "type": "Group",
+        "title": null,
+        "help": null,
+        "custom_actions": [],
+        "AXValue": null,
+        "enabled": true,
+        "role": "AXGroup",
+        "subrole": null
+    }
+]

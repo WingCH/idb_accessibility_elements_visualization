@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iOS Accessibility Elements Visualizer - Auto Format Detection</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f7;
+            color: #333;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            font-size: 28px;
+            border-bottom: 3px solid #5856d6;
+        }
+
+        h2 {
+            color: #444;
+            margin-top: 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eaeaea;
+            font-size: 22px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 25px;
+            font-size: 18px;
+            padding-left: 5px;
+            border-left: 4px solid #5856d6;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .control-panel {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            width: 340px;
+            transition: all 0.3s ease;
+        }
+
+        .visualization {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .phone-frame {
+            width: 440px;
+            height: 956px;
+            border: 12px solid #1d1d1f;
+            border-radius: 40px;
+            overflow: hidden;
+            position: relative;
+            background-color: #ffffff;
+        }
+
+        .element {
+            position: absolute;
+            background-color: rgba(0, 122, 255, 0.2);
+            border: 1px solid rgba(0, 122, 255, 0.8);
+            border-radius: 4px;
+            box-sizing: border-box;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .element:hover {
+            background-color: rgba(0, 122, 255, 0.4);
+            z-index: 100;
+            transform: scale(1.03);
+            box-shadow: 0 0 12px rgba(0, 122, 255, 0.7);
+            border-width: 2px;
+        }
+
+        .element.selected {
+            background-color: rgba(88, 86, 214, 0.5);
+            border: 4px solid rgba(88, 86, 214, 1);
+            box-shadow: 0 0 18px rgba(88, 86, 214, 1);
+            z-index: 200;
+            transform: scale(1.02);
+            transition: all 0.3s ease;
+            outline: 2px dashed white;
+            outline-offset: -8px;
+        }
+
+        .element-label {
+            font-size: 10px;
+            padding: 2px 4px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .element-type-tag {
+            position: absolute;
+            right: 2px;
+            top: 2px;
+            font-size: 8px;
+            padding: 1px 3px;
+            border-radius: 3px;
+            color: white;
+            background-color: #555;
+        }
+
+        .element-type-Application {
+            background-color: #007aff;
+        }
+
+        .element-type-Group {
+            background-color: #34c759;
+        }
+
+        .element-type-Button {
+            background-color: #ff9500;
+        }
+
+        .element-type-TextField {
+            background-color: #af52de;
+        }
+
+        .element-type-StaticText {
+            background-color: #ff2d55;
+        }
+
+        #jsonUpload {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        #elementsTree {
+            margin-top: 15px;
+            max-height: 600px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .tree-item {
+            margin: 3px 0;
+            padding: 6px 8px;
+            cursor: pointer;
+            border-radius: 4px;
+            border-left: 3px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .tree-item:hover {
+            background-color: #f0f0f0;
+            border-left-color: #999;
+        }
+
+        .tree-item.selected {
+            background-color: #cfd5ff;
+            border-left: 5px solid #5856d6;
+            font-weight: bold;
+            box-shadow: 2px 2px 8px rgba(88, 86, 214, 0.2);
+            color: #5856d6;
+        }
+
+        .tree-item-type {
+            display: inline-block;
+            font-size: 10px;
+            padding: 2px 4px;
+            border-radius: 3px;
+            color: white;
+            margin-right: 5px;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .tree-type-Application {
+            background-color: #007aff;
+        }
+
+        .tree-type-Group {
+            background-color: #34c759;
+        }
+
+        .tree-type-Button {
+            background-color: #ff9500;
+        }
+
+        .tree-type-TextField {
+            background-color: #af52de;
+        }
+
+        .tree-type-StaticText {
+            background-color: #ff2d55;
+        }
+
+        .tree-children {
+            margin-left: 20px;
+            border-left: 1px dashed #ccc;
+            padding-left: 5px;
+        }
+
+        #elementInfo {
+            margin-top: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            background-color: #f9f9f9;
+        }
+
+        .property {
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px dotted #eee;
+        }
+
+        .property-name {
+            font-weight: bold;
+            color: #666;
+            margin-right: 5px;
+        }
+
+        .highlight-property {
+            background-color: #fffde0;
+            padding: 5px;
+            border-radius: 3px;
+            border-left: 3px solid #5856d6;
+            box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .filter-options {
+            margin: 15px 0;
+            padding: 15px;
+            background-color: #f0f4ff;
+            border-radius: 8px;
+            border: 1px solid #e0e5ff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .filter-checkbox {
+            margin-right: 10px;
+            margin-bottom: 8px;
+            display: inline-block;
+            padding: 5px 8px;
+            border-radius: 5px;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .filter-checkbox:hover {
+            background-color: #e0e0e0;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .filter-checkbox input {
+            margin-right: 5px;
+            transform: scale(1.2);
+        }
+
+        .format-info {
+            margin: 15px 0;
+            padding: 12px;
+            background-color: #e0f0ff;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            border: 1px solid #b8d8ff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .element-tooltip {
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.85);
+            color: white;
+            padding: 7px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            z-index: 300;
+            pointer-events: none;
+            max-width: 220px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: none;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+
+<body>
+    <h1>iOS Accessibility Elements Visualizer</h1>
+
+    <div class="container">
+        <div class="control-panel">
+            <h2>Control Panel</h2>
+
+            <p>Please upload JSON file:</p>
+            <input type="file" id="jsonUpload" accept=".json">
+            <div class="format-info">
+                <div class="format-detection" id="formatDetection">Upload a file to detect format</div>
+            </div>
+
+            <div class="filter-options">
+                <label class="filter-checkbox" style="background-color: rgba(0, 122, 255, 0.1);">
+                    <input type="checkbox" id="filterApplication" checked> Application
+                </label>
+                <label class="filter-checkbox" style="background-color: rgba(52, 199, 89, 0.1);">
+                    <input type="checkbox" id="filterGroup" checked> Group
+                </label>
+                <label class="filter-checkbox" style="background-color: rgba(255, 149, 0, 0.1);">
+                    <input type="checkbox" id="filterButton" checked> Button
+                </label>
+                <label class="filter-checkbox" style="background-color: rgba(175, 82, 222, 0.1);">
+                    <input type="checkbox" id="filterTextField" checked> TextField
+                </label>
+                <label class="filter-checkbox" style="background-color: rgba(255, 45, 85, 0.1);">
+                    <input type="checkbox" id="filterStaticText" checked> StaticText
+                </label>
+            </div>
+
+            <h3>Element Tree Structure</h3>
+            <div id="elementsTree"></div>
+
+            <h3>Element Details</h3>
+            <div id="elementInfo"></div>
+        </div>
+
+        <div class="visualization">
+            <h2>Visualization</h2>
+            <div class="phone-frame" id="phoneFrame"></div>
+            <div class="element-tooltip" id="elementTooltip"></div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let rawData = null;
+        let accessibilityData = null;
+        let selectedElement = null;
+        let currentFormat = null;
+        let currentFormatNumber = 0;
+
+        // API - Get current format number
+        window.getFormatNumber = function () {
+            return currentFormatNumber;
+        };
+
+        // Event listeners
+        document.getElementById('jsonUpload').addEventListener('change', handleFileUpload);
+
+        // Type filter event listeners
+        document.getElementById('filterApplication').addEventListener('change', updateVisualization);
+        document.getElementById('filterGroup').addEventListener('change', updateVisualization);
+        document.getElementById('filterButton').addEventListener('change', updateVisualization);
+        document.getElementById('filterTextField').addEventListener('change', updateVisualization);
+        document.getElementById('filterStaticText').addEventListener('change', updateVisualization);
+
+        // Detect JSON format type
+        function detectFormatType(data) {
+            // First record detection result
+            const formatDetectionDiv = document.getElementById('formatDetection');
+
+            // Original structure check
+            let formatType = '';
+            let formatNumber = 0;
+
+            if (Array.isArray(data)) {
+                formatType = 'format1';
+                formatNumber = 1;
+            } else if (data.content && Array.isArray(data.content)) {
+                formatType = 'format2';
+                formatNumber = 2;
+            } else {
+                throw new Error('Unknown JSON format');
+            }
+
+            // Display format number with enhanced styling
+            formatDetectionDiv.innerHTML = `
+                <div style="font-size: 16px; color: #0066cc;">
+                    Format Number: <strong style="font-size: 20px; color: #0055aa;">${formatNumber}</strong>
+                </div>`;
+
+            // Save format number in global variable
+            currentFormatNumber = formatNumber;
+
+            return formatType;
+        }
+
+        // Handle JSON file upload
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                try {
+                    const jsonData = JSON.parse(e.target.result);
+                    rawData = jsonData;
+                    const formatType = detectFormatType(jsonData);
+                    currentFormat = formatType;
+                    processData(jsonData, formatType);
+                } catch (error) {
+                    console.error('JSON parsing error:', error);
+                    alert('Cannot parse JSON file. Please ensure the file format is correct.');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // Process data
+        function processData(data, formatType) {
+            if (formatType === 'format1') {
+                processFormat1(data);
+            } else if (formatType === 'format2') {
+                processFormat2(data);
+            }
+        }
+
+        // Process Format 1 data
+        function processFormat1(data) {
+            // Ensure it's an array
+            if (!Array.isArray(data)) {
+                throw new Error('Format 1 must be an array');
+            }
+
+            // Prepare data structure
+            const processedData = {
+                elements: []
+            };
+
+            // Assume first element is root element
+            if (data.length > 0) {
+                const rootElement = {
+                    ...data[0],
+                    id: data[0].AXUniqueId || 'root',
+                    children: []
+                };
+
+                // Add other elements as children
+                for (let i = 1; i < data.length; i++) {
+                    const element = {
+                        ...data[i],
+                        id: data[i].AXUniqueId || `element_${i}`,
+                        children: []
+                    };
+                    rootElement.children.push(element);
+                }
+
+                processedData.elements.push(rootElement);
+            }
+
+            accessibilityData = processedData;
+            renderVisualization(processedData);
+            renderElementsTree(processedData);
+        }
+
+        // Process Format 2 data
+        function processFormat2(data) {
+            if (!data.content || !Array.isArray(data.content) || !data.content[0]?.text) {
+                throw new Error('Invalid Format 2 structure');
+            }
+
+            // Get root element
+            const rootElement = data.content[0].text[0];
+
+            // Create processed data structure
+            const processedData = {
+                elements: [rootElement]
+            };
+
+            accessibilityData = processedData;
+            renderVisualization(processedData);
+            renderElementsTree(processedData);
+        }
+
+        // Render visualization
+        function renderVisualization(data) {
+            const phoneFrame = document.getElementById('phoneFrame');
+            phoneFrame.innerHTML = '';
+
+            if (!data.elements || !data.elements.length) return;
+
+            // Recursive function to create all elements
+            function createElements(element, parent) {
+                if (!element || !element.frame) return;
+
+                // Check if element type should be filtered out
+                const typeFilter = document.getElementById(`filter${element.type}`);
+                if (typeFilter && !typeFilter.checked) return;
+
+                // Create element DOM
+                const elementDiv = document.createElement('div');
+                elementDiv.className = 'element';
+                elementDiv.dataset.id = element.id || element.AXUniqueId || Math.random().toString(36).substr(2, 9);
+                elementDiv.dataset.type = element.type;
+
+                // Set element position and size
+                const frame = element.frame;
+                elementDiv.style.left = `${frame.x}px`;
+                elementDiv.style.top = `${frame.y}px`;
+                elementDiv.style.width = `${frame.width}px`;
+                elementDiv.style.height = `${frame.height}px`;
+
+                // Set different colors based on element type
+                switch (element.type) {
+                    case 'Application':
+                        elementDiv.style.backgroundColor = 'rgba(0, 122, 255, 0.1)';
+                        elementDiv.style.borderColor = 'rgba(0, 122, 255, 0.6)';
+                        break;
+                    case 'Group':
+                        elementDiv.style.backgroundColor = 'rgba(52, 199, 89, 0.1)';
+                        elementDiv.style.borderColor = 'rgba(52, 199, 89, 0.6)';
+                        break;
+                    case 'Button':
+                        elementDiv.style.backgroundColor = 'rgba(255, 149, 0, 0.1)';
+                        elementDiv.style.borderColor = 'rgba(255, 149, 0, 0.6)';
+                        break;
+                    case 'TextField':
+                        elementDiv.style.backgroundColor = 'rgba(175, 82, 222, 0.1)';
+                        elementDiv.style.borderColor = 'rgba(175, 82, 222, 0.6)';
+                        break;
+                    case 'StaticText':
+                        elementDiv.style.backgroundColor = 'rgba(255, 45, 85, 0.1)';
+                        elementDiv.style.borderColor = 'rgba(255, 45, 85, 0.6)';
+                        break;
+                    default:
+                        elementDiv.style.backgroundColor = 'rgba(142, 142, 147, 0.1)';
+                        elementDiv.style.borderColor = 'rgba(142, 142, 147, 0.6)';
+                }
+
+                // Add label
+                const labelDiv = document.createElement('div');
+                labelDiv.className = 'element-label';
+                labelDiv.textContent = element.AXLabel || element.label || element.type;
+                elementDiv.appendChild(labelDiv);
+
+                // Add type tag
+                const typeTag = document.createElement('div');
+                typeTag.className = `element-type-tag element-type-${element.type}`;
+                typeTag.textContent = element.type;
+                elementDiv.appendChild(typeTag);
+
+                // Add mouse hover tooltip
+                elementDiv.addEventListener('mouseover', function (e) {
+                    const tooltip = document.getElementById('elementTooltip');
+                    tooltip.textContent = `${element.type}: ${element.AXLabel || element.label || '(No Label)'}`;
+                    tooltip.style.left = `${e.clientX + 10}px`;
+                    tooltip.style.top = `${e.clientY + 10}px`;
+                    tooltip.style.display = 'block';
+                });
+
+                elementDiv.addEventListener('mousemove', function (e) {
+                    const tooltip = document.getElementById('elementTooltip');
+                    tooltip.style.left = `${e.clientX + 10}px`;
+                    tooltip.style.top = `${e.clientY + 10}px`;
+                });
+
+                elementDiv.addEventListener('mouseout', function () {
+                    const tooltip = document.getElementById('elementTooltip');
+                    tooltip.style.display = 'none';
+                });
+
+                // Add click event
+                elementDiv.addEventListener('click', function () {
+                    selectElement(element);
+
+                    // Visual feedback - improved scale effect with pulse animation
+                    this.style.transform = 'scale(1.08)';
+                    this.style.boxShadow = '0 0 25px rgba(88, 86, 214, 1)';
+
+                    setTimeout(() => {
+                        this.style.transform = '';
+                        // Keep improved shadow if selected
+                        if (!this.classList.contains('selected')) {
+                            this.style.boxShadow = '';
+                        }
+                    }, 300);
+                });
+
+                parent.appendChild(elementDiv);
+
+                // Process child elements
+                if (element.children && element.children.length) {
+                    element.children.forEach(child => {
+                        createElements(child, parent);
+                    });
+                }
+            }
+
+            // Start creating elements
+            data.elements.forEach(element => {
+                createElements(element, phoneFrame);
+            });
+        }
+
+        // Render element tree structure
+        function renderElementsTree(data) {
+            const treeContainer = document.getElementById('elementsTree');
+            treeContainer.innerHTML = '';
+
+            if (!data.elements || !data.elements.length) return;
+
+            function createTreeItem(element, parent) {
+                if (!element) return;
+
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'tree-item';
+                itemDiv.dataset.id = element.id || element.AXUniqueId || Math.random().toString(36).substr(2, 9);
+
+                // Create type label
+                const typeSpan = document.createElement('span');
+                typeSpan.className = `tree-item-type tree-type-${element.type}`;
+                typeSpan.textContent = element.type;
+                itemDiv.appendChild(typeSpan);
+
+                // Based on format type, determine label to display
+                const label = element.AXLabel || element.label || '';
+                const labelSpan = document.createElement('span');
+                labelSpan.textContent = label ? label : '(No Label)';
+                itemDiv.appendChild(labelSpan);
+
+                itemDiv.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    selectElement(element);
+
+                    // Highlight selected item, scroll into view
+                    document.querySelectorAll('.tree-item').forEach(item => {
+                        item.classList.remove('selected');
+                    });
+                    this.classList.add('selected');
+                    this.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                });
+
+                parent.appendChild(itemDiv);
+
+                if (element.children && element.children.length) {
+                    const childrenDiv = document.createElement('div');
+                    childrenDiv.className = 'tree-children';
+                    parent.appendChild(childrenDiv);
+
+                    element.children.forEach(child => {
+                        createTreeItem(child, childrenDiv);
+                    });
+                }
+            }
+
+            data.elements.forEach(element => {
+                createTreeItem(element, treeContainer);
+            });
+        }
+
+        // Select element
+        function selectElement(element) {
+            // Clear previous selection
+            document.querySelectorAll('.element.selected').forEach(el => {
+                el.classList.remove('selected');
+            });
+
+            document.querySelectorAll('.tree-item.selected').forEach(el => {
+                el.classList.remove('selected');
+            });
+
+            // Set new selection
+            selectedElement = element;
+
+            // Highlight element
+            const elementId = element.id || element.AXUniqueId || '';
+            const elementDiv = document.querySelector(`.element[data-id="${elementId}"]`);
+            if (elementDiv) {
+                elementDiv.classList.add('selected');
+
+                // Add flash effect to draw attention
+                elementDiv.animate([
+                    { opacity: '0.7' },
+                    { opacity: '1' }
+                ], {
+                    duration: 300,
+                    iterations: 2,
+                    easing: 'ease-in-out'
+                });
+
+                // Ensure element is visible in viewport
+                elementDiv.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center',
+                    inline: 'center'
+                });
+            }
+
+            // Highlight tree item
+            const treeItem = document.querySelector(`.tree-item[data-id="${elementId}"]`);
+            if (treeItem) {
+                treeItem.classList.add('selected');
+
+                // Add background color transition effect
+                treeItem.animate([
+                    { backgroundColor: '#f0f0f0' },
+                    { backgroundColor: '#cfd5ff' }
+                ], {
+                    duration: 400,
+                    easing: 'ease-out'
+                });
+
+                treeItem.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+            }
+
+            // Display element details with animation
+            displayElementInfo(element);
+        }
+
+        // Display element details
+        function displayElementInfo(element) {
+            const infoDiv = document.getElementById('elementInfo');
+            infoDiv.innerHTML = '';
+
+            if (!element) return;
+
+            // Add a header with highlight color
+            const headerDiv = document.createElement('div');
+            headerDiv.style.backgroundColor = '#5856d6';
+            headerDiv.style.color = 'white';
+            headerDiv.style.padding = '8px';
+            headerDiv.style.borderRadius = '4px 4px 0 0';
+            headerDiv.style.marginBottom = '10px';
+            headerDiv.style.fontWeight = 'bold';
+            headerDiv.style.textAlign = 'center';
+            headerDiv.textContent = `${element.type}: ${element.AXLabel || element.label || '(No Label)'}`;
+            infoDiv.appendChild(headerDiv);
+
+            // Create display for each property with fade-in effect
+            const properties = [
+                { name: 'Element Type', value: element.type, highlight: true },
+                { name: 'Label', value: element.AXLabel || element.label || '(None)', highlight: true },
+                { name: 'Element ID', value: element.id || element.AXUniqueId || '(No ID)' },
+                { name: 'Role', value: element.role },
+                { name: 'Role Description', value: element.role_description },
+                { name: 'Value', value: element.AXValue || element.value || '(None)' },
+                { name: 'Enabled', value: element.enabled ? 'Yes' : 'No' },
+                { name: 'Help Text', value: element.help || '(None)' },
+                { name: 'Coordinates', value: `x: ${element.frame.x}, y: ${element.frame.y}` },
+                { name: 'Size', value: `width: ${element.frame.width}, height: ${element.frame.height}` },
+                { name: 'Custom Actions', value: element.custom_actions && element.custom_actions.length ? element.custom_actions.join(', ') : 'None' }
+            ];
+
+            const propertiesContainer = document.createElement('div');
+            infoDiv.appendChild(propertiesContainer);
+
+            properties.forEach((prop, index) => {
+                if (prop.value !== null && prop.value !== undefined) {
+                    const propDiv = document.createElement('div');
+                    propDiv.className = 'property';
+                    propDiv.style.opacity = '0';
+                    propDiv.style.transform = 'translateY(5px)';
+                    propDiv.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+
+                    if (prop.highlight) {
+                        propDiv.classList.add('highlight-property');
+                    }
+
+                    const nameSpan = document.createElement('span');
+                    nameSpan.className = 'property-name';
+                    nameSpan.textContent = `${prop.name}: `;
+
+                    const valueSpan = document.createElement('span');
+                    valueSpan.textContent = prop.value;
+
+                    propDiv.appendChild(nameSpan);
+                    propDiv.appendChild(valueSpan);
+                    propertiesContainer.appendChild(propDiv);
+
+                    // Staggered fade-in animation
+                    setTimeout(() => {
+                        propDiv.style.opacity = '1';
+                        propDiv.style.transform = 'translateY(0)';
+                    }, 50 * index);
+                }
+            });
+        }
+
+        // Update visualization (based on filters)
+        function updateVisualization() {
+            if (accessibilityData) {
+                renderVisualization(accessibilityData);
+            }
+        }
+
+        // Initialize page
+        window.addEventListener('DOMContentLoaded', () => {
+            // No automatic file loading, user needs to upload manually
+            console.log('Visualization tool ready, please upload JSON file');
+        });
+    </script>
+</body>
+
+</html>

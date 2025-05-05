@@ -1,0 +1,256 @@
+{
+    "content": [
+        {
+            "type": "text",
+            "text": [
+                {
+                    "AXFrame": "{{0, 0}, {440, 956}}",
+                    "AXUniqueId": null,
+                    "frame": {
+                        "y": 0,
+                        "x": 0,
+                        "width": 440,
+                        "height": 956
+                    },
+                    "role_description": "application",
+                    "AXLabel": "Reminders",
+                    "content_required": false,
+                    "type": "Application",
+                    "title": null,
+                    "help": null,
+                    "custom_actions": [],
+                    "AXValue": null,
+                    "enabled": true,
+                    "role": "AXApplication",
+                    "children": [
+                        {
+                            "AXFrame": "{{0, 72}, {440, 56}}",
+                            "AXUniqueId": "Details",
+                            "frame": {
+                                "y": 72,
+                                "x": 0,
+                                "width": 440,
+                                "height": 56
+                            },
+                            "role_description": "Nav bar",
+                            "AXLabel": null,
+                            "content_required": false,
+                            "type": "Group",
+                            "title": null,
+                            "help": null,
+                            "custom_actions": [],
+                            "AXValue": null,
+                            "enabled": true,
+                            "role": "AXGroup",
+                            "children": [],
+                            "subrole": null
+                        },
+                        {
+                            "AXFrame": "{{0, 72}, {440, 884}}",
+                            "AXUniqueId": "ReminderDetail.ID.DetailsTable",
+                            "frame": {
+                                "y": 72,
+                                "x": 0,
+                                "width": 440,
+                                "height": 884
+                            },
+                            "role_description": "Group",
+                            "AXLabel": null,
+                            "content_required": false,
+                            "type": "Group",
+                            "title": null,
+                            "help": null,
+                            "custom_actions": [],
+                            "AXValue": null,
+                            "enabled": true,
+                            "role": "AXGroup",
+                            "children": [
+                                {
+                                    "AXFrame": "{{40, 149}, {360, 22}}",
+                                    "AXUniqueId": "Detail View Title Field",
+                                    "frame": {
+                                        "y": 149,
+                                        "x": 40,
+                                        "width": 360,
+                                        "height": 22
+                                    },
+                                    "role_description": "Group",
+                                    "AXLabel": "Title",
+                                    "content_required": false,
+                                    "type": "TextField",
+                                    "title": null,
+                                    "help": null,
+                                    "custom_actions": [],
+                                    "AXValue": "Pickup",
+                                    "enabled": true,
+                                    "role": "AXTextField",
+                                    "children": [],
+                                    "subrole": null
+                                },
+                                {
+                                    "AXFrame": "{{40, 197.33333206176758}, {360, 22}}",
+                                    "AXUniqueId": "Detail View Note Field",
+                                    "frame": {
+                                        "y": 197.33333206176758,
+                                        "x": 40,
+                                        "width": 360,
+                                        "height": 22
+                                    },
+                                    "role_description": "Group",
+                                    "AXLabel": "Notes",
+                                    "content_required": false,
+                                    "type": "TextField",
+                                    "title": null,
+                                    "help": null,
+                                    "custom_actions": [],
+                                    "AXValue": "",
+                                    "enabled": true,
+                                    "role": "AXTextField",
+                                    "children": [],
+                                    "subrole": null
+                                },
+                                {
+                                    "AXFrame": "{{20, 248.66666412353516}, {400, 51.333332061767578}}",
+                                    "AXUniqueId": null,
+                                    "frame": {
+                                        "y": 248.66666412353516,
+                                        "x": 20,
+                                        "width": 400,
+                                        "height": 51.333332061767578
+                                    },
+                                    "role_description": "text",
+                                    "AXLabel": "Date",
+                                    "content_required": false,
+                                    "type": "StaticText",
+                                    "title": null,
+                                    "help": "Double tap to disable",
+                                    "custom_actions": [
+                                        "Expand Controls"
+                                    ],
+                                    "AXValue": "Tuesday, May 6, 2025, On, Collapsed",
+                                    "enabled": true,
+                                    "role": "AXStaticText",
+                                    "children": [],
+                                    "subrole": null
+                                },
+                                {
+                                    "AXFrame": "{{20, 299.99999618530273}, {400, 48.333332061767578}}",
+                                    "AXUniqueId": null,
+                                    "frame": {
+                                        "y": 299.99999618530273,
+                                        "x": 20,
+                                        "width": 400,
+                                        "height": 48.333332061767578
+                                    },
+                                    "role_description": "text",
+                                    "AXLabel": "Time",
+                                    "content_required": false,
+                                    "type": "StaticText",
+                                    "title": null,
+                                    "help": "Double tap to expand controls and enable",
+                                    "custom_actions": [],
+                                    "AXValue": "Off, Collapsed",
+                                    "enabled": true,
+                                    "role": "AXStaticText",
+                                    "children": [],
+                                    "subrole": null
+                                },
+                                {
+                                    "AXFrame": "{{20, 364.33333969116211}, {400, 48.333332061767578}}",
+                                    "AXUniqueId": null,
+                                    "frame": {
+                                        "y": 364.33333969116211,
+                                        "x": 20,
+                                        "width": 400,
+                                        "height": 48.333332061767578
+                                    },
+                                    "role_description": "button",
+                                    "AXLabel": "Repeat",
+                                    "content_required": false,
+                                    "type": "Button",
+                                    "title": null,
+                                    "help": null,
+                                    "custom_actions": [],
+                                    "AXValue": "Never",
+                                    "enabled": true,
+                                    "role": "AXButton",
+                                    "children": [],
+                                    "subrole": null
+                                },
+                                {
+                                    "AXFrame": "{{20, 428.66667175292969}, {400, 48.333332061767578}}",
+                                    "AXUniqueId": null,
+                                    "frame": {
+                                        "y": 428.66667175292969,
+                                        "x": 20,
+                                        "width": 400,
+                                        "height": 48.333332061767578
+                                    },
+                                    "role_description": "text",
+                                    "AXLabel": "Location",
+                                    "content_required": false,
+                                    "type": "StaticText",
+                                    "title": null,
+                                    "help": "Double tap to expand controls and enable",
+                                    "custom_actions": [],
+                                    "AXValue": "Off, Collapsed",
+                                    "enabled": true,
+                                    "role": "AXStaticText",
+                                    "children": [],
+                                    "subrole": null
+                                },
+                                {
+                                    "AXFrame": "{{20, 493.00000381469727}, {400, 48.333332061767578}}",
+                                    "AXUniqueId": null,
+                                    "frame": {
+                                        "y": 493.00000381469727,
+                                        "x": 20,
+                                        "width": 400,
+                                        "height": 48.333332061767578
+                                    },
+                                    "role_description": "text",
+                                    "AXLabel": "Priority",
+                                    "content_required": false,
+                                    "type": "StaticText",
+                                    "title": null,
+                                    "help": "Double tap to show context menu",
+                                    "custom_actions": [],
+                                    "AXValue": "None",
+                                    "enabled": true,
+                                    "role": "AXStaticText",
+                                    "children": [],
+                                    "subrole": null
+                                },
+                                {
+                                    "AXFrame": "{{20, 541.33333587646484}, {400, 48.333332061767578}}",
+                                    "AXUniqueId": null,
+                                    "frame": {
+                                        "y": 541.33333587646484,
+                                        "x": 20,
+                                        "width": 400,
+                                        "height": 48.333332061767578
+                                    },
+                                    "role_description": "button",
+                                    "AXLabel": "List",
+                                    "content_required": false,
+                                    "type": "Button",
+                                    "title": null,
+                                    "help": null,
+                                    "custom_actions": [],
+                                    "AXValue": "Reminders, List badge, Blue",
+                                    "enabled": true,
+                                    "role": "AXButton",
+                                    "children": [],
+                                    "subrole": null
+                                }
+                            ],
+                            "subrole": null
+                        }
+                    ],
+                    "subrole": null
+                }
+            ]
+        }
+    ],
+    "isError": false
+}
